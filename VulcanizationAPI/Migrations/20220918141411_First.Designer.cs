@@ -11,7 +11,7 @@ using VulcanizationAPI.Entities;
 namespace VulcanizationAPI.Migrations
 {
     [DbContext(typeof(VulcanizationDbContext))]
-    [Migration("20220916185828_First")]
+    [Migration("20220918141411_First")]
     partial class First
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
