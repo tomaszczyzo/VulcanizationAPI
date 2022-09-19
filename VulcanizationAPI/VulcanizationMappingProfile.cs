@@ -22,6 +22,19 @@ namespace VulcanizationAPI
 
             CreateMap<Service, ServiceDto>();
 
+            CreateMap<CreateVulcanizationDto, Vulcanization>()
+                .ForMember(x => x.Address, c => c.MapFrom(dto => new Address()
+                {
+                    City = dto.City,
+                    Street = dto.Street,
+                    PostalCode = dto.PostalCode
+                }))
+                .ForMember(x => x.Contact, c => c.MapFrom(dto => new Contact()
+                {
+                    Email = dto.Email,
+                    PhoneNumber = dto.PhoneNumber
+                }));
+
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,16 @@ namespace VulcanizationAPI.Controllers
         {
             _dbContext = dbContext;
             _mapper = mapper;
+        }
+
+        [HttpPost]
+        public ActionResult CreateVulcanization([FromBody] CreateVulcanizationDto dto)
+        {
+            var vulcanization = _mapper.Map<Vulcanization>(dto);
+            _dbContext.Vulcanizations.Add(vulcanization);
+            _dbContext.SaveChanges();
+
+            return Created($"/api/vulcanization/{vulcanization.Id}", null);
         }
 
         [HttpGet]
