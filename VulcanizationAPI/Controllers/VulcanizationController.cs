@@ -27,6 +27,10 @@ namespace VulcanizationAPI.Controllers
         [HttpPost]
         public ActionResult CreateVulcanization([FromBody] CreateVulcanizationDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var vulcanization = _mapper.Map<Vulcanization>(dto);
             _dbContext.Vulcanizations.Add(vulcanization);
             _dbContext.SaveChanges();
