@@ -2,6 +2,7 @@ using VulcanizationAPI.Entities;
 using VulcanizationAPI;
 using Microsoft.OpenApi.Writers;
 using System.Reflection;
+using VulcanizationAPI.ControllerServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<VulcanizationDbContext>();
 builder.Services.AddScoped<VulcanizationSeeder>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IVulcanizationService, VulcanizationService>();
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();
