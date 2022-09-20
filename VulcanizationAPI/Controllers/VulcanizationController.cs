@@ -7,6 +7,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VulcanizationAPI.ControllerServices;
 using VulcanizationAPI.Entities;
 using VulcanizationAPI.Models;
 
@@ -15,14 +16,14 @@ namespace VulcanizationAPI.Controllers
     [Route("api/vulcanization")]
     public class VulcanizationController : ControllerBase
     {
-        private readonly VulcanizationDbContext _dbContext;
-        private readonly IMapper _mapper;
+       
+        private readonly IVulcanizationService _vulcanizationService;
 
-        public VulcanizationController(VulcanizationDbContext dbContext, IMapper mapper)
+        public VulcanizationController(IVulcanizationService vulcanizationService)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            _vulcanizationService = vulcanizationService;
         }
+        
 
         [HttpPost]
         public ActionResult CreateVulcanization([FromBody] CreateVulcanizationDto dto)
@@ -31,23 +32,16 @@ namespace VulcanizationAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var vulcanization = _mapper.Map<Vulcanization>(dto);
-            _dbContext.Vulcanizations.Add(vulcanization);
-            _dbContext.SaveChanges();
+            var result = _vulcanizationService.Create(dto);
 
-            return Created($"/api/vulcanization/{vulcanization.Id}", null);
+            return Created($"/api/vulcanization/{result}", null);
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<VulcanizationDto>> GetAll()
         {
-            var vulcanizations = _dbContext
-                .Vulcanizations
-                .Include(r => r.Address)
-                .Include(r => r.Contact)
-                .ToList();
 
-            var vulcanizationsDtos = _mapper.Map<List<VulcanizationDto>>(vulcanizations);
+            var vulcanizationsDtos = _vulcanizationService.GetAll();
 
             return Ok(vulcanizationsDtos);
         }
@@ -55,20 +49,15 @@ namespace VulcanizationAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<VulcanizationDto> Get([FromRoute] int id)
         {
-            var vulcanization = _dbContext
-                .Vulcanizations
-                .Include(r => r.Address)
-                .Include(r => r.Contact)
-                .FirstOrDefault(r => r.Id == id);
+            var vulcanization = _vulcanizationService.GetById(id);
 
             if(vulcanization is null)
             {
                 return NotFound();
             }
 
-            var vulcanizationDto = _mapper.Map<VulcanizationDto>(vulcanization);
 
-            return Ok(vulcanizationDto);
+            return Ok(vulcanization);
         }
     }
 }
