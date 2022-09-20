@@ -7,6 +7,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using VulcanizationAPI.ControllerServices;
 using VulcanizationAPI.Entities;
 using VulcanizationAPI.Models;
@@ -58,6 +59,18 @@ namespace VulcanizationAPI.Controllers
 
 
             return Ok(vulcanization);
+        }
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            var isDeleted = _vulcanizationService.Delete(id);
+
+            if (isDeleted)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
         }
     }
 }

@@ -15,6 +15,7 @@ namespace VulcanizationAPI.ControllerServices
         int Create(CreateVulcanizationDto dto);
         IEnumerable<VulcanizationDto> GetAll();
         VulcanizationDto GetById(int id);
+        bool Delete(int id);
     }
 
     public class VulcanizationService : IVulcanizationService
@@ -63,6 +64,21 @@ namespace VulcanizationAPI.ControllerServices
             _dbContext.SaveChanges();
 
             return vulcanization.Id;
+        }
+        public bool Delete(int id)
+        {
+            var vulcanization = _dbContext
+                .Vulcanizations
+                .FirstOrDefault(r => r.Id == id);
+
+
+            if (vulcanization is null)
+                return false;
+
+            _dbContext.Vulcanizations.Remove(vulcanization);
+            _dbContext.SaveChanges();
+
+            return true;
         }
     }
 }
