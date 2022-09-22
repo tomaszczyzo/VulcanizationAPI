@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using VulcanizationAPI.Entities;
 using VulcanizationAPI.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace VulcanizationAPI.ControllerServices
 {
@@ -16,6 +17,7 @@ namespace VulcanizationAPI.ControllerServices
         IEnumerable<VulcanizationDto> GetAll();
         VulcanizationDto GetById(int id);
         bool Delete(int id);
+        bool Update(int id, UpdateVulcanizationDto dto);
     }
 
     public class VulcanizationService : IVulcanizationService
@@ -79,6 +81,24 @@ namespace VulcanizationAPI.ControllerServices
             _dbContext.SaveChanges();
 
             return true;
+        }
+        public bool Update(int id, UpdateVulcanizationDto dto)
+        {
+            var vulcanization = _dbContext
+                .Vulcanizations
+                .FirstOrDefault(r => r.Id == id);
+
+            if (vulcanization is null)
+                return false;
+
+            vulcanization.Name = dto.Name;
+            vulcanization.Description = dto.Description;
+
+            _dbContext.SaveChanges();
+
+            return true;
+
+
         }
     }
 }

@@ -17,14 +17,14 @@ namespace VulcanizationAPI.Controllers
     [Route("api/vulcanization")]
     public class VulcanizationController : ControllerBase
     {
-       
+
         private readonly IVulcanizationService _vulcanizationService;
 
         public VulcanizationController(IVulcanizationService vulcanizationService)
         {
             _vulcanizationService = vulcanizationService;
         }
-        
+
 
         [HttpPost]
         public ActionResult CreateVulcanization([FromBody] CreateVulcanizationDto dto)
@@ -46,13 +46,13 @@ namespace VulcanizationAPI.Controllers
 
             return Ok(vulcanizationsDtos);
         }
-        
+
         [HttpGet("{id}")]
         public ActionResult<VulcanizationDto> Get([FromRoute] int id)
         {
             var vulcanization = _vulcanizationService.GetById(id);
 
-            if(vulcanization is null)
+            if (vulcanization is null)
             {
                 return NotFound();
             }
@@ -60,6 +60,7 @@ namespace VulcanizationAPI.Controllers
 
             return Ok(vulcanization);
         }
+
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
@@ -71,6 +72,22 @@ namespace VulcanizationAPI.Controllers
             }
 
             return NotFound();
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult Update([FromBody] UpdateVulcanizationDto dto, [FromRoute]int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var isUpdated = _vulcanizationService.Update(id, dto);
+            if(!isUpdated)
+            {
+                return NotFound();
+            }
+            return Ok();
         }
     }
 }
