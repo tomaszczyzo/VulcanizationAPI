@@ -8,6 +8,7 @@ using VulcanizationAPI.Entities;
 using VulcanizationAPI.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using VulcanizationAPI.Exceptions;
 
 namespace VulcanizationAPI.ControllerServices
 {
@@ -16,8 +17,8 @@ namespace VulcanizationAPI.ControllerServices
         int Create(CreateVulcanizationDto dto);
         IEnumerable<VulcanizationDto> GetAll();
         VulcanizationDto GetById(int id);
-        bool Delete(int id);
-        bool Update(int id, UpdateVulcanizationDto dto);
+        void Delete(int id);
+        void Update(int id, UpdateVulcanizationDto dto);
     }
 
     public class VulcanizationService : IVulcanizationService
@@ -42,7 +43,7 @@ namespace VulcanizationAPI.ControllerServices
                 .FirstOrDefault(r => r.Id == id);
 
             if (vulcanization is null)
-                return null;
+                throw new NotFoundException("Vulcanization not found");
 
             var result = _mapper.Map<VulcanizationDto>(vulcanization);
 
@@ -69,10 +70,10 @@ namespace VulcanizationAPI.ControllerServices
 
             return vulcanization.Id;
         }
-        public bool Delete(int id)
+        public void Delete(int id)
         {
 
-            _logger.LogError($"Vulcanization with id: {id} DELETE action invoked");
+            //_logger.LogError($"Vulcanization with id: {id} DELETE action invoked");
 
             var vulcanization = _dbContext
                 .Vulcanizations
@@ -80,29 +81,25 @@ namespace VulcanizationAPI.ControllerServices
 
 
             if (vulcanization is null)
-                return false;
+                throw new NotFoundException("Vulcanization not found");
 
             _dbContext.Vulcanizations.Remove(vulcanization);
             _dbContext.SaveChanges();
 
-            return true;
         }
-        public bool Update(int id, UpdateVulcanizationDto dto)
+        public void Update(int id, UpdateVulcanizationDto dto)
         {
             var vulcanization = _dbContext
                 .Vulcanizations
                 .FirstOrDefault(r => r.Id == id);
 
             if (vulcanization is null)
-                return false;
+                throw new NotFoundException("Vulcanization not found");
 
             vulcanization.Name = dto.Name;
             vulcanization.Description = dto.Description;
 
             _dbContext.SaveChanges();
-
-            return true;
-
 
         }
     }

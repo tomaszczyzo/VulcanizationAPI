@@ -15,6 +15,7 @@ using VulcanizationAPI.Models;
 namespace VulcanizationAPI.Controllers
 {
     [Route("api/vulcanization")]
+    [ApiController]
     public class VulcanizationController : ControllerBase
     {
 
@@ -29,10 +30,6 @@ namespace VulcanizationAPI.Controllers
         [HttpPost]
         public ActionResult CreateVulcanization([FromBody] CreateVulcanizationDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var result = _vulcanizationService.Create(dto);
 
             return Created($"/api/vulcanization/{result}", null);
@@ -41,7 +38,6 @@ namespace VulcanizationAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<VulcanizationDto>> GetAll()
         {
-
             var vulcanizationsDtos = _vulcanizationService.GetAll();
 
             return Ok(vulcanizationsDtos);
@@ -52,41 +48,23 @@ namespace VulcanizationAPI.Controllers
         {
             var vulcanization = _vulcanizationService.GetById(id);
 
-            if (vulcanization is null)
-            {
-                return NotFound();
-            }
-
-
             return Ok(vulcanization);
         }
 
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-            var isDeleted = _vulcanizationService.Delete(id);
+            _vulcanizationService.Delete(id);
 
-            if (isDeleted)
-            {
                 return NoContent();
-            }
-
-            return NotFound();
+            
         }
 
         [HttpPut("{id}")]
         public ActionResult Update([FromBody] UpdateVulcanizationDto dto, [FromRoute]int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            _vulcanizationService.Update(id, dto);
 
-            var isUpdated = _vulcanizationService.Update(id, dto);
-            if(!isUpdated)
-            {
-                return NotFound();
-            }
             return Ok();
         }
     }
