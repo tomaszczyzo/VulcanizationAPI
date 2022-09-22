@@ -3,9 +3,14 @@ using VulcanizationAPI;
 using Microsoft.OpenApi.Writers;
 using System.Reflection;
 using VulcanizationAPI.ControllerServices;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Nlog Setup
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+builder.Host.UseNLog();
 // Add services to the container.
 
 builder.Services.AddControllers();

@@ -24,11 +24,13 @@ namespace VulcanizationAPI.ControllerServices
     {
         private readonly VulcanizationDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly ILogger<VulcanizationService> _logger;
 
-        public VulcanizationService(VulcanizationDbContext dbContext, IMapper mapper)
+        public VulcanizationService(VulcanizationDbContext dbContext, IMapper mapper, ILogger<VulcanizationService> logger)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public VulcanizationDto GetById(int id)
@@ -69,6 +71,9 @@ namespace VulcanizationAPI.ControllerServices
         }
         public bool Delete(int id)
         {
+
+            _logger.LogError($"Vulcanization with id: {id} DELETE action invoked");
+
             var vulcanization = _dbContext
                 .Vulcanizations
                 .FirstOrDefault(r => r.Id == id);
