@@ -34,7 +34,7 @@ namespace VulcanizationAPI
                     Email = dto.Email,
                     PhoneNumber = dto.PhoneNumber
                 }));
-
+            CreateMap<CreateServiceDto, Service>();
         }
     }
 }

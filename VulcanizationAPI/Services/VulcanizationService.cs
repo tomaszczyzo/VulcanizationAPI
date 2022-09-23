@@ -40,6 +40,7 @@ namespace VulcanizationAPI.ControllerServices
                 .Vulcanizations
                 .Include(r => r.Address)
                 .Include(r => r.Contact)
+                .Include(r => r.Services)
                 .FirstOrDefault(r => r.Id == id);
 
             if (vulcanization is null)
@@ -56,6 +57,7 @@ namespace VulcanizationAPI.ControllerServices
                 .Vulcanizations
                 .Include(r => r.Address)
                 .Include(r => r.Contact)
+                .Include(r => r.Services)
                 .ToList();
 
             var result = _mapper.Map<List<VulcanizationDto>>(vulcanizations);
