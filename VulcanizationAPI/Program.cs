@@ -22,7 +22,8 @@ builder.Services.AddDbContext<VulcanizationDbContext>();
 builder.Services.AddScoped<VulcanizationSeeder>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IVulcanizationService, VulcanizationService>();
-builder.Services.AddScoped<ErrorHandlingMiddeware>();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
+builder.Services.AddScoped<RequestTimeMiddleware>();
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();
@@ -35,7 +36,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseMiddleware<ErrorHandlingMiddeware>();
+app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<RequestTimeMiddleware>();
 
 app.UseHttpsRedirection();
 

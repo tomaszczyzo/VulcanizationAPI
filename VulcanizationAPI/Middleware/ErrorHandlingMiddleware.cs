@@ -8,11 +8,11 @@ using VulcanizationAPI.Exceptions;
 
 namespace VulcanizationAPI.Middleware
 {
-    public class ErrorHandlingMiddeware : IMiddleware
+    public class ErrorHandlingMiddleware : IMiddleware
     {
-        private readonly ILogger<ErrorHandlingMiddeware> _logger;
+        private readonly ILogger<ErrorHandlingMiddleware> _logger;
 
-        public ErrorHandlingMiddeware(ILogger<ErrorHandlingMiddeware> logger)
+        public ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> logger)
         {
             _logger = logger;
         }
