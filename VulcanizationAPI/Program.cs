@@ -22,6 +22,7 @@ builder.Services.AddDbContext<VulcanizationDbContext>();
 builder.Services.AddScoped<VulcanizationSeeder>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IVulcanizationService, VulcanizationService>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
 
