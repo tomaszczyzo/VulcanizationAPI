@@ -35,11 +35,9 @@ namespace VulcanizationAPI.Migrations
                         .HasColumnType("nvarchar(45)");
 
                     b.Property<string>("PostalCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Street")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -56,11 +54,9 @@ namespace VulcanizationAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -94,11 +90,9 @@ namespace VulcanizationAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
@@ -128,15 +122,12 @@ namespace VulcanizationAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RoleId")
@@ -164,7 +155,6 @@ namespace VulcanizationAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -226,14 +216,12 @@ namespace VulcanizationAPI.Migrations
 
             modelBuilder.Entity("VulcanizationAPI.Entities.Address", b =>
                 {
-                    b.Navigation("Vulcanization")
-                        .IsRequired();
+                    b.Navigation("Vulcanization");
                 });
 
             modelBuilder.Entity("VulcanizationAPI.Entities.Contact", b =>
                 {
-                    b.Navigation("Vulcanization")
-                        .IsRequired();
+                    b.Navigation("Vulcanization");
                 });
 
             modelBuilder.Entity("VulcanizationAPI.Entities.Vulcanization", b =>
