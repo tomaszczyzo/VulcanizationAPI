@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VulcanizationAPI.Entities;
 
@@ -10,9 +11,10 @@ using VulcanizationAPI.Entities;
 namespace VulcanizationAPI.Migrations
 {
     [DbContext(typeof(VulcanizationDbContext))]
-    partial class VulcanizationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220927163858_UserAndRole")]
+    partial class UserAndRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
