@@ -5,6 +5,8 @@ using System.Reflection;
 using VulcanizationAPI.ControllerServices;
 using NLog.Web;
 using VulcanizationAPI.Middleware;
+using VulcanizationAPI.Services;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,8 +25,10 @@ builder.Services.AddScoped<VulcanizationSeeder>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IVulcanizationService, VulcanizationService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();

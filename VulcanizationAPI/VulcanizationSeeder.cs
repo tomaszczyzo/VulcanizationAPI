@@ -37,6 +37,12 @@ namespace VulcanizationAPI
                     _dbContext.AddRange(vulcanizations);
                     _dbContext.SaveChanges();
                 }
+                if (!_dbContext.Roles.Any())
+                {
+                    var roles = GetRoles();
+                    _dbContext.AddRange(roles);
+                    _dbContext.SaveChanges();
+                }
             }
         }
 
@@ -98,7 +104,25 @@ namespace VulcanizationAPI
             };
             return vulcanizations;
         }
-
+        private IEnumerable<Role> GetRoles()
+        {
+            var roles = new List<Role>()
+            {
+                new Role()
+                {
+                    Name = "User"
+                },
+                new Role()
+                {
+                    Name = "Employee"
+                },
+                new Role()
+                {
+                    Name = "Admin"
+                }
+            };
+            return roles;
+        }
     }
 }
 
