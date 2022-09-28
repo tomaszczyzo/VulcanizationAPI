@@ -1,10 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VulcanizationAPI.Exceptions;
+﻿using VulcanizationAPI.Exceptions;
 
 namespace VulcanizationAPI.Middleware
 {
@@ -22,7 +16,12 @@ namespace VulcanizationAPI.Middleware
             {
                 await next.Invoke(context);
             }
-            catch(NotFoundException notFoundException)
+            catch (BadRequestException badRequestException)
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync(badRequestException.Message);
+            }
+            catch (NotFoundException notFoundException)
             {
                 context.Response.StatusCode = 404;
                 await context.Response.WriteAsync(notFoundException.Message);
