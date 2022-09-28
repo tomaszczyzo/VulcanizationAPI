@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VulcanizationAPI.Models;
 using VulcanizationAPI.Services;
 
@@ -24,6 +19,13 @@ namespace VulcanizationAPI.Controllers
         {
             _accountService.RegisterUser(dto);
             return Ok(dto);
+        }
+        [HttpPost("login")]
+        public ActionResult Login([FromBody] LoginDto dto)
+        {
+            string token = _accountService.GenerateJwt(dto);
+
+            return Ok(token);
         }
     }
 }
