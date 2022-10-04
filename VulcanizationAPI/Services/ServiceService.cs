@@ -1,10 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VulcanizationAPI.Entities;
 using VulcanizationAPI.Exceptions;
 using VulcanizationAPI.Models;
@@ -17,6 +12,7 @@ namespace VulcanizationAPI.ControllerServices
         ServiceDto GetById(int vulcanizationId, int serviceId);
         List<ServiceDto> GetAll(int vulcanizationId);
         void DeleteService(int vulcanizationId, int serviceId);
+        void Update(int vulcanizationId, int serviceId, CreateServiceDto dto);
     }
 
     public class ServiceService : IServiceService
@@ -70,6 +66,19 @@ namespace VulcanizationAPI.ControllerServices
             _context.Services.Remove(service);
             _context.SaveChanges();
 
+        }
+        public void Update(int vulcanizationId, int serviceId, CreateServiceDto dto)
+        {
+            var vulcanization = GetVulcanizationById(vulcanizationId);
+
+            var service = GetServiceById(serviceId, vulcanizationId);
+
+
+            service.Name = dto.Name;
+            service.Description = dto.Description;
+            service.Price = dto.Price;
+
+            _context.SaveChanges();
 
         }
 

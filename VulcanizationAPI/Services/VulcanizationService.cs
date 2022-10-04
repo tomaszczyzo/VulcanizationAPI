@@ -1,14 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using VulcanizationAPI.Entities;
-using VulcanizationAPI.Models;
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using VulcanizationAPI.Exceptions;
+using VulcanizationAPI.Models;
 
 namespace VulcanizationAPI.ControllerServices
 {
@@ -18,7 +12,7 @@ namespace VulcanizationAPI.ControllerServices
         IEnumerable<VulcanizationDto> GetAll();
         VulcanizationDto GetById(int id);
         void Delete(int id);
-        void Update(int id, UpdateVulcanizationDto dto);
+        void Update(int id, CreateVulcanizationDto dto);
     }
 
     public class VulcanizationService : IVulcanizationService
@@ -75,7 +69,6 @@ namespace VulcanizationAPI.ControllerServices
         public void Delete(int id)
         {
 
-            //_logger.LogError($"Vulcanization with id: {id} DELETE action invoked");
 
             var vulcanization = _dbContext
                 .Vulcanizations
@@ -89,10 +82,12 @@ namespace VulcanizationAPI.ControllerServices
             _dbContext.SaveChanges();
 
         }
-        public void Update(int id, UpdateVulcanizationDto dto)
+        public void Update(int id, CreateVulcanizationDto dto)
         {
             var vulcanization = _dbContext
                 .Vulcanizations
+                .Include(r => r.Address)
+                .Include(r => r.Contact)
                 .FirstOrDefault(r => r.Id == id);
 
             if (vulcanization is null)
@@ -100,6 +95,11 @@ namespace VulcanizationAPI.ControllerServices
 
             vulcanization.Name = dto.Name;
             vulcanization.Description = dto.Description;
+            vulcanization.Address.City = dto.City;
+            vulcanization.Address.Street = dto.Street;
+            vulcanization.Address.PostalCode = dto.PostalCode;
+            vulcanization.Contact.Email = dto.Email;
+            vulcanization.Contact.PhoneNumber = dto.PhoneNumber;
 
             _dbContext.SaveChanges();
 

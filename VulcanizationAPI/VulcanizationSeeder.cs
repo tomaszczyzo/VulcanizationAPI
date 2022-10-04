@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
 using VulcanizationAPI.Entities;
 
 namespace VulcanizationAPI
@@ -10,10 +6,12 @@ namespace VulcanizationAPI
     public class VulcanizationSeeder
     {
         private readonly VulcanizationDbContext _dbContext;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
-        public VulcanizationSeeder(VulcanizationDbContext dbContext)
+        public VulcanizationSeeder(VulcanizationDbContext dbContext, IPasswordHasher<User> passwordHasher)
         {
             _dbContext = dbContext;
+            _passwordHasher = passwordHasher;
         }
         public void Seed()
         {
@@ -43,6 +41,18 @@ namespace VulcanizationAPI
                     _dbContext.AddRange(roles);
                     _dbContext.SaveChanges();
                 }
+                if (!_dbContext.Users.Any())
+                {
+                    var users = GetUsers();
+                    _dbContext.AddRange(users);
+                    _dbContext.SaveChanges();
+                }
+                if (!_dbContext.Services.Any())
+                {
+                    var services = GetServices();
+                    _dbContext.AddRange(services);
+                    _dbContext.SaveChanges();
+                }
             }
         }
 
@@ -52,13 +62,13 @@ namespace VulcanizationAPI
             {
                 new Contact()
                 {
-                    Email = "Dario@gmail.com",
-                    PhoneNumber = "333222111"
+                    Email = "Vulcanization1@gmail.com",
+                    PhoneNumber = "888888888"
                 },
                 new Contact()
                 {
-                    Email = "Mario@gmail.com",
-                    PhoneNumber = "111222333"
+                    Email = "Vulcanization2@gmail.com",
+                    PhoneNumber = "+48321321321"
                 }
             };
             return contacts;
@@ -69,15 +79,15 @@ namespace VulcanizationAPI
             {
                 new Address()
                 {
-                    City = "Warsaw",
+                    City = "Warszawa",
                     Street = "Domowa",
                     PostalCode = "00-002"
                 },
                 new Address()
                 {
-                    City = "Prague",
-                    Street = "Highcastle",
-                    PostalCode = "100-00"
+                    City = "Rzeszów",
+                    Street = "Dąbrowskiego",
+                    PostalCode = "35-036"
                 }
             };
             return addresses;
@@ -88,18 +98,18 @@ namespace VulcanizationAPI
             {
                 new Vulcanization()
                 {
-                    Name = "Dario Vulcanization",
-                    Description = "Hello its me",
+                    Name = "First Vulcanization",
+                    Description = "First exemplary vulcanization",
                     AddressId = 1,
-                    ContactId = 1
+                    ContactId = 2
 
                 },
                 new Vulcanization()
                 {
-                    Name = "Mario Vulcanization",
-                    Description = "Hello there",
+                    Name = "Second Vulcanization",
+                    Description = "Second examplary vulcanization",
                     AddressId = 2,
-                    ContactId = 2
+                    ContactId = 1
                 }
             };
             return vulcanizations;
@@ -122,6 +132,83 @@ namespace VulcanizationAPI
                 }
             };
             return roles;
+        }
+        private IEnumerable<User> GetUsers()
+        {
+            var admin = new User()
+            {
+                Email = "admin@admin.pl",
+                FirstName = "Admin",
+                LastName = "Adminowski",
+                RoleId = 3
+            };
+            admin.PasswordHash = _passwordHasher.HashPassword(admin, "Haslo123");
+
+            var employee = new User()
+            {
+                Email = "employee@employee.pl",
+                FirstName = "Employee",
+                LastName = "Marks",
+                RoleId = 2
+            };
+            employee.PasswordHash = _passwordHasher.HashPassword(employee, "Haslo123");
+
+            var user = new User()
+            {
+                Email = "user@user.pl",
+                FirstName = "Userus",
+                LastName = "Markos",
+                RoleId = 1
+            };
+            user.PasswordHash = _passwordHasher.HashPassword(user, "Haslo123");
+
+            var users = new List<User>() { admin, employee, user };
+            return users;
+        }
+        private IEnumerable<Service> GetServices()
+        {
+            var services = new List<Service>()
+            {
+                new Service()
+                {
+                    Name = "wymiana opon",
+                    Description = "Powinna obejmować także ewentualną wymianę tzw. zaworków, " +
+                                    "które po sezonie ulegają przegrzaniu i spękaniu, przez co zaczynają stanowić zagrożenie w czasie jazdy",
+                    Price = 70,
+                    VulcanizationId = 1
+                },
+                new Service()
+                {
+                    Name = "wyważanie kół",
+                    Description = "Pozwala uniknąć niekorzystnych drgań, przedwczesnego i nieregularnego " +
+                                    "zużywania się opon oraz nadmiernego zużywania się elementów zawieszenia samochodu",
+                    Price = 40,
+                    VulcanizationId = 1
+                },
+                new Service()
+                {
+                    Name = "pompowanie opon",
+                    Description = "Jest ważne głównie dlatego, że zbyt wysokie lub zbyt niskie ciśnienie może powodować szybkie zużycie ogumienia",
+                    Price = 34,
+                    VulcanizationId = 1
+                },
+                new Service()
+                {
+                    Name = "pompowanie opon",
+                    Description = "Jest ważne głównie dlatego, że zbyt wysokie lub zbyt niskie ciśnienie może powodować szybkie zużycie ogumienia",
+                    Price = 30,
+                    VulcanizationId = 2
+                },
+                new Service()
+                {
+                    Name = "naprawa ogumienia",
+                    Description ="dętkowe i bezdętkowe",
+                    Price = 70,
+                    VulcanizationId = 2
+
+                }
+            };
+            return services;
         }
     }
 }
