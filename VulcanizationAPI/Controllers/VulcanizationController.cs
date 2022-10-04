@@ -7,7 +7,7 @@ namespace VulcanizationAPI.Controllers
 {
     [Route("api/vulcanization")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class VulcanizationController : ControllerBase
     {
 
@@ -20,7 +20,7 @@ namespace VulcanizationAPI.Controllers
 
         //do zmiany
         [HttpPost]
-        [Authorize(Roles = "Admin,Employee")]
+        //[Authorize(Roles = "Admin,Employee")]
         public ActionResult CreateVulcanization([FromBody] CreateVulcanizationDto dto)
         {
             var result = _vulcanizationService.Create(dto);
@@ -55,7 +55,7 @@ namespace VulcanizationAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update([FromBody] UpdateVulcanizationDto dto, [FromRoute] int id)
+        public ActionResult Update([FromBody] CreateVulcanizationDto dto, [FromRoute] int id)
         {
             _vulcanizationService.Update(id, dto);
 

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VulcanizationAPI.Models
+﻿namespace VulcanizationAPI.Models
 {
     public class RegisterUserDto
     {

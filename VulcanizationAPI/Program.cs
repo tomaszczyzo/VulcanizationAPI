@@ -51,6 +51,8 @@ builder.Services.AddScoped<IVulcanizationService, VulcanizationService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+builder.Services.AddScoped<IValidator<CreateVulcanizationDto>, CreateVulcanizationDtoValidator>();
+builder.Services.AddScoped<IValidator<CreateServiceDto>, CreateServiceDtoValidator>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();

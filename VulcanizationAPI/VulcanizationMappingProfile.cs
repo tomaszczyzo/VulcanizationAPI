@@ -1,9 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VulcanizationAPI.Entities;
 using VulcanizationAPI.Models;
 
@@ -35,6 +30,7 @@ namespace VulcanizationAPI
                     PhoneNumber = dto.PhoneNumber
                 }));
             CreateMap<CreateServiceDto, Service>();
+            CreateMap<Service, CreateServiceDto>();
         }
     }
 }

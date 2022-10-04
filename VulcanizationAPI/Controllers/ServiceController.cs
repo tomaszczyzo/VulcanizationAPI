@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VulcanizationAPI.ControllerServices;
+using VulcanizationAPI.Entities;
 using VulcanizationAPI.Models;
 
 namespace VulcanizationAPI.Controllers
@@ -14,13 +10,15 @@ namespace VulcanizationAPI.Controllers
     public class ServiceController : ControllerBase
     {
         private readonly IServiceService _serviceService;
+        private readonly VulcanizationDbContext _dbContext;
 
-        public ServiceController(IServiceService serviceService)
+        public ServiceController(IServiceService serviceService, VulcanizationDbContext dbContext)
         {
             _serviceService = serviceService;
+            _dbContext = dbContext;
         }
         [HttpPost]
-        public ActionResult CreateService([FromRoute]int vulcanizationId, [FromBody]CreateServiceDto dto)
+        public ActionResult CreateService([FromRoute] int vulcanizationId, [FromBody] CreateServiceDto dto)
         {
             var newServiceId = _serviceService.Create(vulcanizationId, dto);
 
@@ -39,6 +37,13 @@ namespace VulcanizationAPI.Controllers
             var serviceDtos = _serviceService.GetAll(vulcanizationId);
 
             return Ok(serviceDtos);
+        }
+        [HttpPut("{serviceId}")]
+        public ActionResult Update([FromRoute] int vulcanizationId, [FromRoute] int serviceId, [FromBody] CreateServiceDto dto)
+        {
+            _serviceService.Update(vulcanizationId, serviceId, dto);
+
+            return Ok();
         }
         [HttpDelete("{serviceId}")]
         public ActionResult Delete([FromRoute] int vulcanizationId, [FromRoute] int serviceId)
