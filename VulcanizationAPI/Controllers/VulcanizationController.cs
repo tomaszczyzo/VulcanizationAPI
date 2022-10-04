@@ -7,7 +7,7 @@ namespace VulcanizationAPI.Controllers
 {
     [Route("api/vulcanization")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class VulcanizationController : ControllerBase
     {
 
@@ -18,9 +18,8 @@ namespace VulcanizationAPI.Controllers
             _vulcanizationService = vulcanizationService;
         }
 
-        //do zmiany
         [HttpPost]
-        //[Authorize(Roles = "Admin,Employee")]
+        [Authorize(Roles = "Admin")]
         public ActionResult CreateVulcanization([FromBody] CreateVulcanizationDto dto)
         {
             var result = _vulcanizationService.Create(dto);
@@ -29,6 +28,7 @@ namespace VulcanizationAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult<IEnumerable<VulcanizationDto>> GetAll()
         {
             var vulcanizationsDtos = _vulcanizationService.GetAll();
@@ -46,6 +46,7 @@ namespace VulcanizationAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete([FromRoute] int id)
         {
             _vulcanizationService.Delete(id);
@@ -55,6 +56,7 @@ namespace VulcanizationAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Update([FromBody] CreateVulcanizationDto dto, [FromRoute] int id)
         {
             _vulcanizationService.Update(id, dto);
