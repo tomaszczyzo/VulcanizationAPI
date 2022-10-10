@@ -29,9 +29,9 @@ namespace VulcanizationAPI.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult<IEnumerable<VulcanizationDto>> GetAll()
+        public async Task<ActionResult<IEnumerable<VulcanizationDto>>> GetAll()
         {
-            var vulcanizationsDtos = _vulcanizationService.GetAll();
+            var vulcanizationsDtos = await _vulcanizationService.GetAll();
 
             return Ok(vulcanizationsDtos);
         }

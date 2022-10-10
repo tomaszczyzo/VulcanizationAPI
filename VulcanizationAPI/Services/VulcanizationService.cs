@@ -9,7 +9,7 @@ namespace VulcanizationAPI.ControllerServices
     public interface IVulcanizationService
     {
         int Create(CreateVulcanizationDto dto);
-        IEnumerable<VulcanizationDto> GetAll();
+        Task<IEnumerable<VulcanizationDto>> GetAll();
         VulcanizationDto GetById(int id);
         void Delete(int id);
         void Update(int id, CreateVulcanizationDto dto);
@@ -45,14 +45,15 @@ namespace VulcanizationAPI.ControllerServices
             return result;
         }
 
-        public IEnumerable<VulcanizationDto> GetAll()
+        public async Task<IEnumerable<VulcanizationDto>> GetAll()
         {
-            var vulcanizations = _dbContext
+            var vulcanizations = await _dbContext
                 .Vulcanizations
+                .AsQueryable()
                 .Include(r => r.Address)
                 .Include(r => r.Contact)
                 .Include(r => r.Services)
-                .ToList();
+                .ToListAsync();
 
             var result = _mapper.Map<List<VulcanizationDto>>(vulcanizations);
 
