@@ -25,7 +25,7 @@ namespace VulcanizationAPI.Controllers
         {
             string token = _accountService.GenerateJwt(dto);
 
-            return Ok(token);
+            return Ok(new AuthenticatedResponse { Token = token });
         }
     }
 }
