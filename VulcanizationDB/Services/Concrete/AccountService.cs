@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -8,36 +7,31 @@ using VulcanizationAPI.Core.Entities;
 using VulcanizationAPI.Core.Exceptions;
 using VulcanizationAPI.Core.Models.Authentication;
 using VulcanizationAPI.Core.Models.DTOs;
-using VulcanizationAPI.Infrastructure.Data;
+using VulcanizationAPI.Infrastructure.Data.Repositories.Abstract;
+using VulcanizationAPI.Infrastructure.Services.Abstract;
 
-namespace VulcanizationAPI.Infrastructure.Services
+namespace VulcanizationAPI.Infrastructure.Services.Concrete
 {
-    public interface IAccountService
-    {
-        string GenerateJwt(LoginDto dto);
-        void RegisterUser(RegisterUserDto dto);
-    }
-
     public class AccountService : IAccountService
     {
-        private readonly VulcanizationDbContext _dbContext;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly AuthenticationSettings _authenticationSettings;
+        private readonly IAccountRepository _accountRepository;
 
-        public AccountService(VulcanizationDbContext dbContext, 
-            IPasswordHasher<User> passwordHasher, 
-            AuthenticationSettings authenticationSettings)
+        public AccountService(IPasswordHasher<User> passwordHasher,
+            AuthenticationSettings authenticationSettings,
+            IAccountRepository accountRepository)
         {
-            _dbContext = dbContext;
             _passwordHasher = passwordHasher;
             _authenticationSettings = authenticationSettings;
+            _accountRepository = accountRepository;
         }
 
-        public string GenerateJwt(LoginDto dto)
+        public async Task<string> GenerateJwt(LoginDto dto)
         {
-            var user = _dbContext.Users
-                .Include(u => u.Role)
-                .FirstOrDefault(u => u.Email == dto.Email);
+            User user = await _accountRepository
+                .FindSingleAsync(u => u.Email == dto.Email, u => u.Role);
+
             if (user is null)
             {
                 throw new BadRequestException("Invalid username or password.");
@@ -69,7 +63,7 @@ namespace VulcanizationAPI.Infrastructure.Services
             return tokenHandler.WriteToken(token);
         }
 
-        public void RegisterUser(RegisterUserDto dto)
+        public async Task RegisterUser(RegisterUserDto dto)
         {
             var newUser = new User()
             {
@@ -80,8 +74,7 @@ namespace VulcanizationAPI.Infrastructure.Services
             };
             var hashedPassword = _passwordHasher.HashPassword(newUser, dto.Password);
             newUser.PasswordHash = hashedPassword;
-            _dbContext.Users.Add(newUser);
-            _dbContext.SaveChanges();
+            await _accountRepository.AddAsync(newUser);
         }
     }
 }

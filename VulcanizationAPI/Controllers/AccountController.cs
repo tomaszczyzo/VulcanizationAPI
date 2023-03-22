@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VulcanizationAPI.Core.Models.Authentication;
 using VulcanizationAPI.Core.Models.DTOs;
-using VulcanizationAPI.Infrastructure.Services;
+using VulcanizationAPI.Infrastructure.Services.Abstract;
+using VulcanizationAPI.Infrastructure.Services.Concrete;
 
 namespace VulcanizationAPI.Controllers
 {
@@ -16,15 +17,15 @@ namespace VulcanizationAPI.Controllers
             _accountService = accountService;
         }
         [HttpPost("register")]
-        public ActionResult RegisterUser([FromBody] RegisterUserDto dto)
+        public async Task<ActionResult> RegisterUser([FromBody] RegisterUserDto dto)
         {
-            _accountService.RegisterUser(dto);
-            return Ok(dto);
+            await _accountService.RegisterUser(dto);
+            return Ok();
         }
         [HttpPost("login")]
-        public ActionResult Login([FromBody] LoginDto dto)
+        public async Task<ActionResult> Login([FromBody] LoginDto dto)
         {
-            string token = _accountService.GenerateJwt(dto);
+            string token = await _accountService.GenerateJwt(dto);
 
             return Ok(new AuthenticatedResponse { Token = token });
         }
