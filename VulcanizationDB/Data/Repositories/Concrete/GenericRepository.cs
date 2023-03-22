@@ -22,47 +22,75 @@ namespace MyWebApi.Infrastructure.Data.Repositories
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet
+                .ToListAsync();
         }
 
         public async Task<TEntity> GetByIdAsync(long id)
         {
-            return await _dbSet.FindAsync(id);
+            return await _dbSet
+                .FindAsync(id);
         }
 
         public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            return await _dbSet
+                .Where(predicate)
+                .ToListAsync();
+        }
+        public async Task<TEntity> FindSingleAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            IQueryable<TEntity> query = _context.Set<TEntity>().Where(predicate);
+
+            return await query.FirstOrDefaultAsync();
+        }
+        public async Task<TEntity> FindSingleAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = _context.Set<TEntity>().Where(predicate);
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task AddAsync(TEntity entity)
         {
-            await _dbSet.AddAsync(entity);
+            await _dbSet
+                .AddAsync(entity);
         }
 
         public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
-            await _dbSet.AddRangeAsync(entities);
+            await _dbSet
+                .AddRangeAsync(entities);
         }
 
         public void Update(TEntity entity)
         {
-            _dbSet.Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
+            _dbSet
+                .Attach(entity);
+            _context
+                .Entry(entity).State = EntityState.Modified;
         }
 
         public void Delete(TEntity entity)
         {
             if (_context.Entry(entity).State == EntityState.Detached)
             {
-                _dbSet.Attach(entity);
+                _dbSet
+                    .Attach(entity);
             }
-            _dbSet.Remove(entity);
+            _dbSet
+                .Remove(entity);
         }
 
         public void DeleteRange(IEnumerable<TEntity> entities)
         {
-            _dbSet.RemoveRange(entities);
+            _dbSet
+                .RemoveRange(entities);
         }
     }
 }
