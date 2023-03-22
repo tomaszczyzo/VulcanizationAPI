@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VulcanizationAPI.Models;
-using VulcanizationAPI.Services;
+using VulcanizationAPI.Core.Models.Authentication;
+using VulcanizationAPI.Core.Models.DTOs;
+using VulcanizationAPI.Infrastructure.Services;
 
 namespace VulcanizationAPI.Controllers
 {

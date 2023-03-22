@@ -1,4 +1,4 @@
-﻿using VulcanizationAPI.Exceptions;
+﻿using VulcanizationAPI.Core.Exceptions;
 
 namespace VulcanizationAPI.Middleware
 {
